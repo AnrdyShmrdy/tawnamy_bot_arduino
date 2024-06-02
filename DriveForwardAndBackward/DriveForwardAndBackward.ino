@@ -18,7 +18,7 @@ void setup() {
   pinMode(in3, OUTPUT); //This Works
   pinMode(in4, OUTPUT); //This Works
   // Set initial rotation direction
-  //Values >= 65 will work, but above 65 is recommended
+  //Values >= 65 should allow the robot to move, but above 65 is recommended
   analogWrite(enA, 90);
   analogWrite(enB, 90); //this works
 }
