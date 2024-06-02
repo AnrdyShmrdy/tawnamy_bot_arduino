@@ -4,6 +4,7 @@
 #define in3 7
 #define in4 8
 #define enB 9 
+#define PWM_VAL 100
 //14 Works for PWM and Digital
 //15 Works for Digital and PWM
 //ENA and ENB cannot be 21, 20, 19, or 18
@@ -19,19 +20,24 @@ void setup() {
   pinMode(in4, OUTPUT); //This Works
   // Set initial rotation direction
   //Values >= 65 should allow the robot to move, but above 65 is recommended
-  analogWrite(enA, 90);
-  analogWrite(enB, 90); //this works
+  analogWrite(enA, PWM_VAL);
+  analogWrite(enB, PWM_VAL); //this works
 }
-
-void loop() {
+void moveBackward(){
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
   digitalWrite(in3, LOW); //this works
   digitalWrite(in4, HIGH); //this works
-  delay(2000);
+}
+void moveForward(){
   digitalWrite(in1, HIGH);
   digitalWrite(in2, LOW);
   digitalWrite(in3, HIGH); //this works
   digitalWrite(in4, LOW); //this works
+}
+void loop() {
+  moveForward();
+  delay(2000);
+  moveBackward();
   delay(2000);
 }

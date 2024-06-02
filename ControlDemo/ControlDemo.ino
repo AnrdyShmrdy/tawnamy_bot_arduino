@@ -23,7 +23,7 @@ bool micro_ros_init_successful;
 #define in3 7
 #define in4 8
 #define enB 9 
-
+#define PWM_VAL 100
 #define LED_PIN 13
 
 #define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){return false;}}
@@ -46,7 +46,18 @@ void error_loop(){
     delay(100);
   }
 }
-
+void moveBackward(){
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+}
+void moveForward(){
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+}
 void subscription_callback(const void * msgin)
 {  
   const std_msgs__msg__Int32 * msg = (const std_msgs__msg__Int32 *)msgin;
@@ -55,18 +66,10 @@ void subscription_callback(const void * msgin)
   Serial.print("Recieved: ");
   Serial.println(msg->data);
   if (msg->data == 1){
-    //TODO: Verify if this actually moves the robot forward!
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
-    digitalWrite(in3, LOW);
-    digitalWrite(in4, HIGH);
+    moveForward();
   }
   else if (msg->data == -1){
-    //TODO: Verify if this actually moves the robot backward!
-    digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
-    digitalWrite(in3, HIGH);
-    digitalWrite(in4, LOW);
+    moveBackward();
   }
   //digitalWrite(LED_PIN, (msg->data == 0) ? LOW : HIGH);  
 }
@@ -111,15 +114,15 @@ void destroy_entities()
 }
 
 void setup() {
-pinMode(enA, OUTPUT);
+  pinMode(enA, OUTPUT);
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
   pinMode(enB, OUTPUT);
   pinMode(in3, OUTPUT);
   pinMode(in4, OUTPUT);
   //Values >= 65 should allow the robot to move, but above 65 is recommended
-  analogWrite(enA, 90);
-  analogWrite(enB, 90);
+  analogWrite(enA, PWM_VAL);
+  analogWrite(enB, PWM_VAL);
 
   Serial.begin(9600); //Will communicate over USB. Used for seeing output in serial monitor on computer
   set_microros_transports();
